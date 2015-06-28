@@ -1,5 +1,5 @@
 require "dnp/client"
-require "dnp/server"
+require "dnp/listener"
 
 module Dnp
 end

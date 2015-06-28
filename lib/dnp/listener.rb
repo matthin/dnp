@@ -3,7 +3,7 @@ require "socket"
 require "dnp/handle"
 
 module Dnp
-  class Server
+  class Listener
     def initialize(port)
       @socket = UDPSocket.new
       @socket.bind("127.0.0.1", port)
