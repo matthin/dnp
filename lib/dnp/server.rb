@@ -46,8 +46,20 @@ module Dnp
     end
 
     def create_client(host, port)
-      @socket.send(67.to_s, 0, host, port)
-      @handles << Handle.new(67, host, port)
+      id = generate_id
+      @socket.send([id].pack("S"), 0, host, port)
+      @handles << Handle.new(id, host, port)
+    end
+
+    def generate_id
+      id = rand(1024)
+      @handles.each do |handle|
+        if id == handle.id
+          id = generate_id
+          break
+        end
+      end
+      id
     end
   end
 end
