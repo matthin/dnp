@@ -26,11 +26,9 @@ module Dnp
         size = header.unpack("S")[0].to_i
         id = header.unpack("S*")[1].to_i
 
-        if size == 0
+        if id == 0
           create_client(addr[2], addr[1])
-        end
-
-        unless id == 0
+        else
           @handles.each do |handle|
             if handle.id == id
               @socket.send(
@@ -52,7 +50,7 @@ module Dnp
     end
 
     def generate_id
-      id = rand(1024)
+      id = rand(1..1024)
       @handles.each do |handle|
         if id == handle.id
           id = generate_id
