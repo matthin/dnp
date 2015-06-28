@@ -10,7 +10,7 @@ module Dnp
 
       @handles = []
 
-      read
+      Thread.new(read).join
     end
 
     def accept
