@@ -22,7 +22,9 @@ module Dnp
       @socket.flush
     end
 
-    def receive(size: 20)
+    def receive
+      header = @socket.recv(2)
+      size = header.unpack("S")[0].to_i
       @socket.recv(size)
     end
   end

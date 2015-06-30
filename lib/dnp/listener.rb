@@ -49,7 +49,7 @@ module Dnp
       @socket.send([id].pack("S"), 0, host, port)
 
       @clients << ServerClient.new(
-        Handle.new(id, host, port)
+        Handle.new(id, host, port), @socket
       )
     end
 
