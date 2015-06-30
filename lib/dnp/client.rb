@@ -2,8 +2,6 @@ require "socket"
 
 module Dnp
   class Client
-    attr_accessor(:handle)
-
     def initialize(host, port)
       @socket = UDPSocket.new
       @socket.bind("127.0.0.1", 8081)
@@ -18,8 +16,10 @@ module Dnp
 
     def send(message)
       @socket.send(
-        [message.bytesize, @id].pack("S*") + message, 0
+        [message.bytesize, @id].pack("S*"), 0
       )
+      @socket.send(message, 0) if message.size > 0
+      @socket.flush
     end
 
     def receive(size: 20)

@@ -1,5 +1,6 @@
 require "socket"
 
+require "dnp/server_client"
 require "dnp/handle"
 
 module Dnp
@@ -8,15 +9,20 @@ module Dnp
       @socket = UDPSocket.new
       @socket.bind("127.0.0.1", port)
 
-      @handles = []
+      @clients = []
 
-      Thread.new(read).join
+      Thread.new do
+        read
+      end
     end
 
     def accept
-      message, addr = @socket.recvfrom(2)
-      message = message.unpack("S")
-      puts message
+      clients_num = @clients.length
+      loop do
+        break if clients_num < @clients.length
+        sleep(1)
+      end
+      @clients[clients_num]
     end
 
   private
@@ -29,14 +35,9 @@ module Dnp
         if id == 0
           create_client(addr[2], addr[1])
         else
-          @handles.each do |handle|
-            if handle.id == id
-              @socket.send(
-                "Testing123",
-                0,
-                handle.host,
-                handle.port
-              )
+          @clients.each do |client|
+            if client.handle.id == id
+              client.buffer << @socket.recv(size)
             end
           end
         end
@@ -46,13 +47,16 @@ module Dnp
     def create_client(host, port)
       id = generate_id
       @socket.send([id].pack("S"), 0, host, port)
-      @handles << Handle.new(id, host, port)
+
+      @clients << ServerClient.new(
+        Handle.new(id, host, port)
+      )
     end
 
     def generate_id
       id = rand(1..1024)
-      @handles.each do |handle|
-        if id == handle.id
+      @clients.each do |client|
+        if id == client.handle.id
           id = generate_id
           break
         end
