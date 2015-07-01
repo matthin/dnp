@@ -5,6 +5,8 @@ require "dnp/handle"
 
 module Dnp
   class Listener
+    ACCEPT_INTERVAL = 0.1
+
     def initialize(port)
       @socket = UDPSocket.new
       @socket.bind("127.0.0.1", port)
@@ -20,7 +22,7 @@ module Dnp
       clients_num = @clients.length
       loop do
         break if clients_num < @clients.length
-        sleep(1)
+        sleep(ACCEPT_INTERVAL)
       end
       @clients[clients_num]
     end

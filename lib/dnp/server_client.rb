@@ -3,6 +3,8 @@ module Dnp
     attr_accessor(:buffer)
     attr_reader(:handle)
 
+    BUFFER_INTERVAL = 0.1
+
     def initialize(handle, socket)
       @handle = handle
       @socket = socket
@@ -12,7 +14,7 @@ module Dnp
     def receive
       loop do
         return buffer.delete_at(0) if buffer.size > 0
-        sleep(0.1)
+        sleep(BUFFER_INTERVAL)
       end
     end
 
