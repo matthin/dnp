@@ -9,5 +9,7 @@ Gem::Specification.new do |spec|
   spec.homepage    = "TODO: Put your gem's website or public repo URL here."
   spec.license     = "MIT"
   spec.require_paths = ["lib"]
+  spec.add_development_dependency("rake", "~> 10.4")
+  spec.add_development_dependency("rspec", "~> 3.3")
 end
 
