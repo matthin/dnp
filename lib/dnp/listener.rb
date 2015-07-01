@@ -7,9 +7,9 @@ module Dnp
   class Listener
     ACCEPT_INTERVAL = 0.1
 
-    def initialize(port)
+    def initialize(port, host: "127.0.0.1")
       @socket = UDPSocket.new
-      @socket.bind("127.0.0.1", port)
+      @socket.bind(host, port)
 
       @clients = []
 
