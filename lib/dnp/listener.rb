@@ -8,7 +8,11 @@ module Dnp
     ACCEPT_INTERVAL = 0.1
 
     def initialize(port, host: "127.0.0.1")
-      @socket = UDPSocket.new
+      if host.include?("::")
+        @socket = UDPSocket.new(Socket::AF_INET6)
+      else
+        @socket = UDPSocket.new
+      end
       @socket.bind(host, port)
 
       @clients = []
