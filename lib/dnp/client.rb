@@ -4,7 +4,6 @@ module Dnp
   class Client
     def initialize(host, port)
       @socket = UDPSocket.new
-      @socket.bind("127.0.0.1", 8081)
       @socket.connect(host, port)
 
       @id = 0
