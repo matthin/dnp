@@ -1,4 +1,9 @@
 # Dumb Network Protocol
+[![Build Status](https://travis-ci.org/matthin/dnp.png?branch=master)]
+(https://travis-ci.org/matthin/dnp)
+[![Gem Version](https://badge.fury.io/rb/dnp.png)]
+(http://badge.fury.io/rb/dnp)
+
 This is small example of the DNP (Completely useless, and very dumb) in Ruby.
 
 # Usage
