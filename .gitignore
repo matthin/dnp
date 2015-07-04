@@ -1,5 +1,7 @@
 Gemfile.lock
 *.gem
+
+.yardoc/
 doc/
 
 # Vim
