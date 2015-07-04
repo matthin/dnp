@@ -4,9 +4,15 @@ require "dnp/server_client"
 require "dnp/handle"
 
 module Dnp
+  # Listens on a specific port and optional host.
+  # @author Justin Harrison
+  # @since 0.0.1
   class Listener
+    # The length to sleep before checking for a new client.
     ACCEPT_INTERVAL = 0.1
 
+    # @param [Integer] port The port which will be bound to.
+    # @param [String] host The host will be bound to.
     def initialize(port, host: "127.0.0.1")
       if host.include?("::")
         @socket = UDPSocket.new(Socket::AF_INET6)
@@ -22,6 +28,12 @@ module Dnp
       end
     end
 
+    # Accepts new incomming clients.
+    # @since 0.0.1
+    # @return [ServerClient] Any available client on the stack.
+    #
+    #   client = listener.accept
+    #   client.send("Testing!")
     def accept
       clients_num = @clients.length
       loop do
@@ -32,6 +44,7 @@ module Dnp
     end
 
   private
+    # Handles all incomming data an the bound port.
     def read
       loop do
         header, addr = @socket.recvfrom(4)
@@ -50,6 +63,9 @@ module Dnp
       end
     end
 
+    # Initializes a new server-side representation of a network client.
+    # @param [String] host The host address of the remote client.
+    # @param [Integer] port The port of the remote client.
     def create_client(host, port)
       id = generate_id
       @socket.send([id].pack("S"), 0, host, port)
@@ -59,6 +75,8 @@ module Dnp
       )
     end
 
+    # Randomly generates a unique id for keeping track of clients.
+    # @return [Integer] A unique ID.
     def generate_id
       id = rand(1..1024)
       @clients.each do |client|

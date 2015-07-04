@@ -1,5 +1,6 @@
 Gemfile.lock
 *.gem
+doc/
 
 # Vim
 *.swp
