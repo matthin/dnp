@@ -4,7 +4,7 @@
 [![Gem Version](https://badge.fury.io/rb/dnp.png)]
 (http://badge.fury.io/rb/dnp)
 [![Inch Status](https://inch-ci.org/github/matthin/dnp.svg?branch=master)]
-(https://inch-ci.org/github/matthin/dnp/branch/master
+(https://inch-ci.org/github/matthin/dnp/branch/master)
 
 This is small example of the DNP (Completely useless, and very dumb) in Ruby.
 
