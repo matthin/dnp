@@ -1,0 +1,4 @@
+Style/TrailingBlankLines:
+  # Complains about final new lines.
+  Enabled: false
+

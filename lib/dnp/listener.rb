@@ -1,7 +1,7 @@
-require "socket"
+require 'socket'
 
-require "dnp/server_client"
-require "dnp/handle"
+require 'dnp/server_client'
+require 'dnp/handle'
 
 module Dnp
   # Listens on a specific port and optional host.
@@ -13,8 +13,8 @@ module Dnp
 
     # @param [Integer] port The port which will be bound to.
     # @param [String] host The host will be bound to.
-    def initialize(port, host: "127.0.0.1")
-      if host.include?("::")
+    def initialize(port, host: '127.0.0.1')
+      if host.include?('::')
         @socket = UDPSocket.new(Socket::AF_INET6)
       else
         @socket = UDPSocket.new
@@ -43,22 +43,19 @@ module Dnp
       @clients[clients_num]
     end
 
-  private
+    private
+
     # Handles all incomming data an the bound port.
     def read
       loop do
         header, addr = @socket.recvfrom(4)
-        size = header.unpack("S")[0].to_i
-        id = header.unpack("S*")[1].to_i
+        size = header.unpack('S')[0].to_i
+        id = header.unpack('S*')[1].to_i
 
         if id == 0
           create_client(addr[2], addr[1])
         else
-          @clients.each do |client|
-            if client.handle.id == id
-              client.buffer << @socket.recv(size)
-            end
-          end
+          inject_message(id, @socket.recv(size))
         end
       end
     end
@@ -68,7 +65,7 @@ module Dnp
     # @param [Integer] port The port of the remote client.
     def create_client(host, port)
       id = generate_id
-      @socket.send([id].pack("S"), 0, host, port)
+      @socket.send([id].pack('S'), 0, host, port)
 
       @clients << ServerClient.new(
         Handle.new(id, host, port), @socket
@@ -86,6 +83,14 @@ module Dnp
         end
       end
       id
+    end
+
+    # Injects a received message into the proper client.
+    # @param [Integer] id The clients' unique ID.
+    # @param [String] message The message to inject.
+    def inject_message(id, message)
+      client = @clients.find { |entry| entry.handle.id == id }
+      client.buffer << message
     end
   end
 end

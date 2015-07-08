@@ -33,10 +33,9 @@ module Dnp
     # @param [String] message The message to send
     def send(message)
       @socket.send(
-        [message.bytesize].pack("S*"), 0, handle.host, handle.port
+        [message.bytesize].pack('S*'), 0, handle.host, handle.port
       )
       @socket.send(message, 0, handle.host, handle.port) if message.size > 0
-      @socket.flush
     end
   end
 end

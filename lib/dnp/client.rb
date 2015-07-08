@@ -1,4 +1,4 @@
-require "socket"
+require 'socket'
 
 module Dnp
   # A end-user representation of a network client. Typically connects to a
@@ -14,16 +14,16 @@ module Dnp
 
       @id = 0
       # The server will initialize our client if we send an id of 0.
-      send("")
+      send('')
 
-      @id = @socket.recv(2).unpack("S")[0].to_i
+      @id = @socket.recv(2).unpack('S')[0].to_i
     end
 
     # Sends a message to the remote server.
     # #param [String] message The message to send.
     def send(message)
       @socket.send(
-        [message.bytesize, @id].pack("S*"), 0
+        [message.bytesize, @id].pack('S*'), 0
       )
       @socket.send(message, 0) if message.size > 0
       @socket.flush
@@ -33,7 +33,7 @@ module Dnp
     # @return [String] The received message.
     def receive
       header = @socket.recv(2)
-      size = header.unpack("S")[0].to_i
+      size = header.unpack('S')[0].to_i
       @socket.recv(size)
     end
   end
